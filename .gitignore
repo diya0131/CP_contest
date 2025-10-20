@@ -1,0 +1,37 @@
+# ---------------------------------
+# --- 1. General ignore rules   ---
+# ---------------------------------
+
+# Ignore text or log files generated during tests
+*.log
+
+# Ignore compiled binary files
+*.exe
+*.out
+*.o
+*.obj
+*.a
+*.so
+*.dll
+*.zip
+
+# Ignore build directories
+/build/
+/bin/
+/dist/
+
+# Ignore system or IDE files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.bak
+*.tmp
+
+# Ignore Visual Studio Code or CLion configs (optional)
+.vscode/
+.idea/
+
+# ----------------------------------------------------
+# --- 2. Exceptions (must come after general rules) ---
+# ----------------------------------------------------
