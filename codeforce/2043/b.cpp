@@ -1,5 +1,7 @@
 #include<bits/stdc++.h>
-#include<random>
+#include<chrono>
+#include <random>
+
 #define ll long long
 #define pb push_back
 #define ff first
@@ -14,23 +16,24 @@
 using namespace std;
 
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-
 const bool TEST = 0;
 
 void solve() {
-    ll n, d, s, i;
+    int n, d, i;
     cin>>n>>d;
     cout<<1<<" ";
-    if(d%3==0 || n>=3) cout<<3<<" ";
-    if(d%5==0) cout<<5<<" ";
-    if(d%7==0 || n>=3) cout<<7<<" ";
-    if(n>=6 || d%9==0 || ( d%3==0 && n>=3)) cout<<9<<" ";
+    if(n>=3 || d%3==0) cout<<3<<" ";
+    if(d==5) cout<<5<<" ";
+    if(n>=3 || d==7) cout<<7<<" ";
+    if(n>=6 || d==9) cout<<9<<" ";
+    else{
+        if(n>=3 && d%3==0) cout<<9<<" ";
+    }
     cout<<endl;
-
-    
 }
 
 int main() {
+    // BOOST
     int t;
     cin >> t;
     while (t--) {

@@ -1,0 +1,55 @@
+#include<bits/stdc++.h>
+#include<chrono>
+#include <random>
+
+#define ll long long
+#define pb push_back
+#define ff first
+#define ss second
+#define _ << " " <<
+#define debug(a) cout << #a << "=" << a << endl;
+#define ALL(a) a.begin(), a.end()
+#define LLA(a) a.rbegin(), a.rend()
+#define BOOST cin.tie(0); cout.tie(0); ios_base::sync_with_stdio(0);
+#define test if(TEST) cout
+
+using namespace std;
+
+mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+const bool TEST = 0;
+
+void solve() {
+    ll x, m, i, k = 1, s = 0, t, mn;
+    cin>>x>>m;
+    while (k <= x) {
+        k *= 2;
+    }
+    mn = min(k, m+1);
+    for (i = 1;i < mn;i++) {
+        t = i ^ x;
+        if (t % i == 0 || t % x == 0) s++;
+    
+    }
+    if(m>=k){
+        ll mx = (m | (k-1));
+        s+=(mx/x-1);
+        mn = m / k * k;
+        for(i=mn;i<=mx;i++){
+            t = i ^ x;
+            if (i%x==0 && t>m) {
+                s--;
+            }
+        }
+    }
+    
+    cout<<s<<endl;
+}
+
+int main() {
+    // BOOST
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+}

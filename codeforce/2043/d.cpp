@@ -1,5 +1,7 @@
 #include<bits/stdc++.h>
-#include<random>
+#include<chrono>
+#include <random>
+
 #define ll long long
 #define pb push_back
 #define ff first
@@ -14,42 +16,34 @@
 using namespace std;
 
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-
 const bool TEST = 0;
 
-ll gcd(ll x, ll y) {
-    while(x!=0 && y!=0){
-        if(x>y) x%=y;
-        else y%=x;
-    }
-    return x+y;
-}
-
 void solve() {
-    ll l, r, g, i, j, res=-1, resl=-1, resr=-1;
-    cin>>l >> r>>g;
-    l = (l+g-1)/g;
-    r = r/g;
-    for(i=0;i<40;i++){
-        for(j=0;j<40;j++){
-            if(l + i <= r - j){
-                if(gcd(l+i, r-j)==1){
-                    if(r-j - l - i+1 > res){
-                        res = (r-j - l - i+1);
-                        resl=l+i;
-                        resr=r-j;
-                    }
-                    break;
+    ll l, r, i, j, g, s, k, res = -1, a=-1, b=-1;
+    cin>>l>>r>>g;
+    l = ((l-1)/g+1)*g;
+    r = r/g * g;
+    for(i=0;i<30;i++){
+        for(j=0;j<30;j++){
+            if(l/g+i > r/g - j) break;
+            if(gcd(l/g + i, r/g - j)==1){
+                if(r/g - j - l/g - i> res ){
+                    res = r/g - j - l/g - i;
+                    a = l/g + i;
+                    b = r/g - j;
                 }
             }
         }
     }
-    if(res==-1) cout<<-1 _ -1<<endl;
-    else cout<<resl*g _ resr*g<<endl;
+    if(res != -1){
+        a*=g;
+        b*=g;
+    }
+    cout<<a _ b<<endl;
 }
 
 int main() {
-    BOOST
+    // BOOST
     int t;
     cin >> t;
     while (t--) {

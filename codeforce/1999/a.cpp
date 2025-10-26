@@ -1,0 +1,28 @@
+#include<bits/stdc++.h>
+
+#define ll long long 
+#define ff first
+#define ss second
+#define test if(te) cout<<
+#define pb push_back
+#define ALL(a) a.begin(), a.end()
+#define _ <<" "<<
+
+using namespace std;
+
+const bool te = true;
+
+void solve(){
+    int a, b, c, i;
+    cin>>a;
+    cout<<a/10+a%10<<endl;
+
+}
+
+int main(){
+    int t;
+    cin>>t;
+    while(t--){
+        solve();
+    }
+}

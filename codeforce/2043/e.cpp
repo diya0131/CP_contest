@@ -1,5 +1,7 @@
 #include<bits/stdc++.h>
-#include<random>
+#include<chrono>
+#include <random>
+
 #define ll long long
 #define pb push_back
 #define ff first
@@ -14,79 +16,83 @@
 using namespace std;
 
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-
 const bool TEST = 0;
 
-void solve() {
-    ll n, m, i, j, k, t, q, s, r, c;
-    cin>>n>>m;
-    vector < vector < ll > > a(n, vector<ll> (m)), b(n, vector<ll> (m));
-    vector < vector < ll > > row(m+1), col(n+1);
-    vector < bool > rb(n+1), cb(m+1);
-    for(i=0;i<n;i++){
-        for(j=0;j<m;j++){
-            cin>>a[i][j];
+bool check(vector< ll >& row, vector<ll >& col, ll n, ll m, vector< vector< ll > >& a, vector< vector< ll > >& b, ll q){
+    ll i=n-1, j=m-1, s, tn=n, tm=m;;
+    vector< pair < ll, ll > > rrow(n), ccol(m);
+    for(i=0;i<n;i++) rrow[i]={row[i], i};
+    for(i=0;i<m;i++) ccol[i]={col[i], i};
+    vector< bool > ro(n, 0), co(m, 0);
+    sort(ALL(rrow));
+    sort(ALL(ccol));
+    // cout<<"------------\n";
+    // cout<<tn _ tm _ q<<endl;
+    // for(i=0;i<n;i++){
+    //     cout<<row[i] _ i<<endl;
+    // }
+    // for(i=0;i<m;i++){
+    //     cout<<col[i] _ i<<endl;
+    // }
+    i=n-1;
+    j=m-1;
+    while(tn>0 && tm>0){
+        // cout<<tn _ tm _ rrow[i].ff _ ccol[j].ff _ endl;
+        if(i>=0 && rrow[i].ff==tm){
+            // cout<<"ro" _ i <<endl;
+            ro[rrow[i].ss]=1;
+            tn--;
+            i--;
+            continue;
         }
+        if(j>=0 && ccol[j].ff==tn){
+            // cout<<"co" _ j <<endl;
+            co[ccol[j].ss]=1;
+            tm--;
+            j--;
+            continue;
+        }
+        break;
+    }
+    for(i=0;i<n;i++){
+        if(ro[i]) continue;
+        for(j=0;j<m;j++){
+            if(co[j]) continue;
+            if((a[i][j]/q)%2!=(b[i][j]/q)%2) {
+                // cout<<i _ j _ q _ ro[i] _ co[j]<<endl;
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+void solve() {
+    ll n, m, i, j, k, s, t, l;
+    cin>>n>>m;
+    vector < vector < ll > > a(n, vector<ll>(m)), b(n, vector<ll>(m));
+    for(i=0;i<n;i++){
+        for(j=0;j<m;j++) cin>>a[i][j];
     }
     for(i=0;i<n;i++){
         for(j=0;j<m;j++) cin>>b[i][j];
     }
-    q=1;
-    for(ll l=0;l<30;l++){
-        bool can = true;
-        for(i=0;i<=m;i++) {
-            row[i].clear();
-            cb[i]=1;
-        }
-        for(i=0;i<=n;i++) {
-            col[i].clear();
-            rb[i]=1;
-        }
-        for(i=0;i<n;i++){
-            s=0;
-            for(j=0;j<m;j++){
-                if((b[i][j] & q) ==0) s++; 
+    vector< vector< ll > > row(30, vector<ll> (n, 0)), col(30, vector<ll> (m, 0));
+    for(i=0;i<n;i++){
+        for(j=0;j<m;j++){
+            t=b[i][j];
+            for(l=0;l<30;l++){
+                if(t%2) col[l][j]++;
+                else row[l][i]++;
+                t/=2;
             }
-            row[s].pb(i);
         }
-        for(i=0;i<m;i++){
-            s=0;
-            for(j=0;j<n;j++){
-                if((b[j][i] & q) !=0) s++; 
-            }
-            col[s].pb(i);
-        }
-        if(row[m].size()>0) i=1;
-        else i=0;
-        r = n;
-        c = m;
-        while(true){
-            if(i%2){
-                if(c==0) break;
-                if(row[c].size()==0) break;
-                r-=row[c].size();
-                for(ll ro: row[c]){
-                    rb[ro]=0;
-                }
-            } else{
-                if(r==0) break;
-                if(col[r].size()==0) break;
-                c-=col[r].size();
-                for(ll co: col[r]){
-                    cb[co]=0;
-                }
-            }
-            i++;
-        }
-        for(i=0;i<n;i++){
-            if(!rb[i]) continue;
-            for(j=0;j<m;j++){
-                if(!cb[j]) continue;
-                if((a[i][j] & q) != (b[i][j] & q)) {
-                    cout<<"No\n";
-                    return;
-                } 
-            }
+    }
+    ll q = 1;
+    for(i=0;i<30;i++){
+        if(!check(row[i], col[i], n, m, a, b, q)){
+            cout<<"No\n";
+            return;
         }
         q*=2;
     }
@@ -94,6 +100,7 @@ void solve() {
 }
 
 int main() {
+    // BOOST
     ll t;
     cin >> t;
     while (t--) {

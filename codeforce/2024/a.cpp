@@ -16,7 +16,12 @@ using namespace std;
 const bool TEST = 0;
 
 void solve() {
-    cout<<("here\n");
+    int a, b;
+    cin>>a>>b;
+    if(a>b) cout<<a<<endl;
+    else {
+        cout<<max(0, a-(b-a))<<endl;
+    }
 }
 
 int main() {

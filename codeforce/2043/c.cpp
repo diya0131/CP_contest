@@ -1,5 +1,7 @@
 #include<bits/stdc++.h>
-#include<random>
+#include<chrono>
+#include <random>
+
 #define ll long long
 #define pb push_back
 #define ff first
@@ -14,121 +16,91 @@
 using namespace std;
 
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-
 const bool TEST = 0;
 
 void solve() {
-    ll k, n, neg=0, pos=0, s=0, sp=-1, i;
+    ll n, i, j, k=-1, s=0, ma=0, mi=0, sma=0, smi=0;
     cin>>n;
-    ll a[n];
+    vector< ll > a(n);
     for(i=0;i<n;i++){
-        cin>>k;
-        a[i]=k;
-        if(k==1) pos++;
-        else if(k==-1) neg++;
-        else sp=i;
-    } 
-    if(sp==-1){
-        ll mn = 0, mx = 0;
-        s=0;
-        for(i=0;i<n;i++){
-            s+=a[i];
-            if(s<0) s=0;
-            mx=max(s, mx);
-        }
-        s=0;
-        for(i=0;i<n;i++){
-            s+=a[i];
-            if(s>0) s=0;
-            mn=min(s, mn);
-        }
-        cout<<mx - mn +1<<endl;
-        for(i=mn;i<=mx;i++){
-            cout<<i<<" ";
-        }
-        cout<<endl;
-    } else {
-        ll lmn=0, lmx=0, rmn=0, rmx=0;
-        s=0;
-        for(i=0;i<sp;i++){
-            s+=a[i];
-            if(s<0) s=0;
-            lmx=max(s, lmx);
-        }
-        s=0;
-        for(i=0;i<sp;i++){
-            s+=a[i];
-            if(s>0) s=0;
-            lmn=min(s, lmn);
-        }
-        s=0;
-        for(i=sp+1;i<n;i++){
-            s+=a[i];
-            if(s<0) s=0;
-            rmx=max(s, rmx);
-        }
-        s=0;
-        for(i=sp+1;i<n;i++){
-            s+=a[i];
-            if(s>0) s=0;
-            rmn=min(s, rmn);
-        }
-        ll mn = min(lmn, rmn), mx = max(lmx, rmx), spmx=a[sp], spmn=a[sp];
-        s=0;
-        for(i=sp;i>=0;i--){
-            s+=a[i];
-            spmx=max(spmx, s);
-            spmn=min(spmn, s);
-        }
-        s=0;
-        ll dmx=spmx, dmn=spmn;
-        spmx=0;
-        spmn=0;
-        for(i=sp+1;i<n;i++){
-            s+=a[i];
-            spmx=max(spmx, s);
-            spmn=min(spmn, s);
-        }
-        spmx+=dmx;
-        spmn+=dmn;
-        if(mn<spmn){
-            ll c=0;
-            for(i=mn;i<=mx;i++){
-                c++;
-            }
-            for(i=max(mx+1, spmn);i<=spmx;i++){
-                c++;
-            }
-            cout<<c<<endl;
-            for(i=mn;i<=mx;i++){
-                cout<<i<<" ";
-            }
-            for(i=max(mx+1, spmn);i<=spmx;i++){
-                cout<<i<<" ";
-            }
-            cout<<endl;
-        } else {
-            ll c=0;
-            for(i=spmn;i<=spmx;i++){
-                c++;
-            }
-            for(i=max(spmx+1, mn);i<=mx;i++){
-                c++;
-            }
-            cout<<c<<endl;
-            for(i=spmn;i<=spmx;i++){
-                cout<<i<<" ";
-            }
-            for(i=max(spmx+1, mn);i<=mx;i++){
-                cout<<i<<" ";
-            }
-            cout<<endl;
+        cin>>a[i];
+        if(a[i]!=1 && a[i]!=-1){
+            k = i;
         }
     }
+    if(k==-1) k=0;
+    s=0;
+    for(i=k+1;i<n;i++){
+        s+=a[i];
+        ma = max(s, ma);
+        mi = min(s, mi);
+    }
+    sma = ma;
+    smi = mi;
+    ma = 0;
+    mi = 0;
+    s=0;
+    for(i=k-1;i>=0;i--){
+        s+=a[i];
+        ma = max(s, ma);
+        mi = min(s, mi);
+    }
+    sma += ma;
+    smi += mi;
+    ma = 0;
+    mi = 0;
+    s=0;
+    for(i=0;i<k;i++){
+        s+=a[i];
+        if(s<0) s=0;
+        ma=max(ma, s);
+    }
+    s=0;
+    for(i=k+1;i<n;i++){
+        s+=a[i];
+        if(s<0) s=0;
+        ma=max(ma, s);
+    }
+    s=0;
+    for(i=0;i<k;i++){
+        s+=a[i];
+        if(s>0) s=0;
+        mi=min(mi, s);
+    }
+    s=0;
+    for(i=k+1;i<n;i++){
+        s+=a[i];
+        if(s>0) s=0;
+        mi=min(mi, s);
+    }
+    // cout<<sma _ smi _ ma _ mi _ a[k]<<endl;
+    ll res = sma - smi + 2 + ma - mi;
+
+    if(min(a[k]+sma, ma) >= max(a[k]+smi, mi)){
+        res -= min(a[k]+sma, ma) - max(a[k]+smi, mi)+1;
+    }
+    cout<<res<<endl;
+    if(mi<a[k]+smi){
+        for(i=mi;i<=ma;i++){
+            cout<<i<<" ";
+        }
+        for(i=smi; i<=sma;i++){
+            if(a[k]+i<mi || ma<a[k]+i) cout<<a[k]+i<<" ";
+        }
+    } else {
+        for(i=smi; i<=sma;i++){
+            cout<<a[k]+i<<" ";
+        }
+        for(i=mi;i<=ma;i++){
+            if(i<a[k]+smi || a[k]+sma<i)cout<<i<<" ";
+        }
         
+    }
+    cout<<endl;
 }
 
 int main() {
+    // BOOST
     int t;
     cin >> t;
     while (t--) {
